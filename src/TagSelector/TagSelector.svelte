@@ -20,7 +20,10 @@
       const tag = tags.find((tag) => (
         tag.value === parseInt(val, 10)
       ));
-      if (tag) {
+      if (!tag) {
+        return;
+      }
+      if (selectedTags.indexOf(tag) < 0) {
         const newTags = [...selectedTags, tag];
         selectedTags = newTags;
       }
@@ -46,6 +49,7 @@
   {/each}
 </div>
 <select on:change={handleSelect}>
+  <option selected value="">Select a Bruin</option>
   {#each tags as tag}
     <option value={tag.value}>{tag.name}</option>
   {/each}
