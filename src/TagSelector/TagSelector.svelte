@@ -1,9 +1,31 @@
 <script lang="ts">
   import Tag from './Tag.svelte';
-  let tags = [
+
+  interface Tag {
+    name: string;
+    value: number;
+  }
+
+  let tags: Tag[] = [
     { name: 'Patrice', value: 1 },
     { name: 'Brad', value: 2 },
   ];
+
+  let selectedTags: Tag[] = [];
+
+  function handleSelect(e: Event) {
+    const target = e?.target as HTMLInputElement;
+    const val = target.value;
+    if (val) {
+      const tag = tags.find((tag) => (
+        tag.value === parseInt(val, 10)
+      ));
+      if (tag) {
+        const newTags = [...selectedTags, tag];
+        selectedTags = newTags;
+      }
+    }
+  }
 </script>
 
 <style>
@@ -19,7 +41,12 @@
 </style>
 
 <div class="container">
-  {#each tags as tag}
+  {#each selectedTags as tag}
     <Tag name={tag.name} />
   {/each}
 </div>
+<select on:change={handleSelect}>
+  {#each tags as tag}
+    <option value={tag.value}>{tag.name}</option>
+  {/each}
+</select>
